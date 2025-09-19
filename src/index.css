@@ -2,41 +2,70 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Suwaseriya Medical Design System - Professional Healthcare Interface */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Medical Color Palette */
+    --background: 210 20% 98%;
+    --foreground: 215 25% 27%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 215 25% 27%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 215 25% 27%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Medical Blue - Professional Trust */
+    --primary: 211 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 211 100% 45%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Soft Medical Gray */
+    --secondary: 210 16% 93%;
+    --secondary-foreground: 215 25% 27%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Subtle Background */
+    --muted: 210 13% 95%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Medical Accent - Calm Teal */
+    --accent: 187 85% 53%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Emergency Red */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --emergency: 0 90% 55%;
+    --emergency-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Success Green for Vitals */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
 
-    --radius: 0.5rem;
+    /* Warning Orange for Alerts */
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    --border: 210 20% 90%;
+    --input: 210 20% 96%;
+    --ring: 211 100% 50%;
+
+    --radius: 0.75rem;
+
+    /* Medical Gradients */
+    --gradient-medical: linear-gradient(135deg, hsl(211 100% 50%), hsl(187 85% 53%));
+    --gradient-emergency: linear-gradient(135deg, hsl(0 90% 55%), hsl(15 100% 60%));
+    --gradient-success: linear-gradient(135deg, hsl(142 76% 36%), hsl(160 84% 39%));
+    --gradient-calm: linear-gradient(180deg, hsl(210 20% 98%), hsl(210 16% 93%));
+
+    /* Medical Shadows */
+    --shadow-medical: 0 4px 20px -4px hsl(211 100% 50% / 0.3);
+    --shadow-emergency: 0 4px 20px -4px hsl(0 90% 55% / 0.4);
+    --shadow-soft: 0 2px 10px -2px hsl(215 25% 27% / 0.1);
+
+    /* Typography for Accessibility */
+    --font-medical: 'Inter', system-ui, sans-serif;
 
     --sidebar-background: 0 0% 98%;
 
