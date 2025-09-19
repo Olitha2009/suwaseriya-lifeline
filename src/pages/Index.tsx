@@ -6,33 +6,11 @@ import { EmergencyPanel } from "@/components/EmergencyPanel"
 import { PatientCard } from "@/components/PatientCard"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-
-const mockPatients = [
-  {
-    id: "1",
-    name: "John Smith",
-    age: 65,
-    condition: "Acute Myocardial Infarction",
-    status: "critical" as const,
-    lastUpdate: "5 minutes ago",
-    location: "Ambulance Unit 7",
-    allergies: ["Penicillin", "Aspirin"],
-    medications: ["Metoprolol", "Lisinopril"]
-  },
-  {
-    id: "2",
-    name: "Maria Garcia",
-    age: 58,
-    condition: "Unstable Angina",
-    status: "monitoring" as const,
-    lastUpdate: "12 minutes ago",
-    location: "Emergency Room",
-    allergies: ["Latex"],
-    medications: ["Atorvastatin", "Clopidogrel"]
-  }
-]
+import { usePatients } from "@/hooks/usePatients"
 
 const Index = () => {
+  const { patients, loading: patientsLoading } = usePatients();
+
   return (
     <div className="min-h-screen bg-background font-medical">
       <MedicalHeader />
@@ -68,9 +46,19 @@ const Index = () => {
 
           <TabsContent value="patients" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {mockPatients.map((patient) => (
-                <PatientCard key={patient.id} patient={patient} />
-              ))}
+              {patientsLoading ? (
+                <div className="col-span-full text-center py-8">Loading patients...</div>
+              ) : (
+                patients.map((patient) => (
+                  <PatientCard 
+                    key={patient.id} 
+                    patient={{
+                      ...patient,
+                      lastUpdate: new Date(patient.last_update).toLocaleString()
+                    }} 
+                  />
+                ))
+              )}
             </div>
           </TabsContent>
 

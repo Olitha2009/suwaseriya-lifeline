@@ -14,7 +14,146 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      emergency_alerts: {
+        Row: {
+          condition: string
+          created_at: string
+          id: string
+          location: string
+          patient_name: string
+          status: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          condition: string
+          created_at?: string
+          id?: string
+          location: string
+          patient_name: string
+          status: string
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          condition?: string
+          created_at?: string
+          id?: string
+          location?: string
+          patient_name?: string
+          status?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          role: string
+          sender: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          role: string
+          sender: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          role?: string
+          sender?: string
+        }
+        Relationships: []
+      }
+      patients: {
+        Row: {
+          age: number
+          allergies: string[] | null
+          condition: string
+          created_at: string
+          id: string
+          last_update: string
+          location: string
+          medications: string[] | null
+          name: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          age: number
+          allergies?: string[] | null
+          condition: string
+          created_at?: string
+          id?: string
+          last_update?: string
+          location: string
+          medications?: string[] | null
+          name: string
+          status: string
+          updated_at?: string
+        }
+        Update: {
+          age?: number
+          allergies?: string[] | null
+          condition?: string
+          created_at?: string
+          id?: string
+          last_update?: string
+          location?: string
+          medications?: string[] | null
+          name?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      vitals: {
+        Row: {
+          blood_pressure_diastolic: number
+          blood_pressure_systolic: number
+          heart_rate: number
+          id: string
+          oxygen_saturation: number
+          patient_id: string
+          recorded_at: string
+          temperature: number
+        }
+        Insert: {
+          blood_pressure_diastolic: number
+          blood_pressure_systolic: number
+          heart_rate: number
+          id?: string
+          oxygen_saturation: number
+          patient_id: string
+          recorded_at?: string
+          temperature: number
+        }
+        Update: {
+          blood_pressure_diastolic?: number
+          blood_pressure_systolic?: number
+          heart_rate?: number
+          id?: string
+          oxygen_saturation?: number
+          patient_id?: string
+          recorded_at?: string
+          temperature?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vitals_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

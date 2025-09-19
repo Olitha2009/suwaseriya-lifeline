@@ -1,41 +1,7 @@
 import { Activity, Heart, Thermometer, Zap } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 import { Badge } from "./ui/badge"
-
-const vitalsData = [
-  {
-    name: "Heart Rate",
-    value: "72",
-    unit: "BPM",
-    status: "normal",
-    icon: Heart,
-    trend: "+2 from last reading"
-  },
-  {
-    name: "Blood Pressure",
-    value: "120/80",
-    unit: "mmHg",
-    status: "normal",
-    icon: Activity,
-    trend: "Stable"
-  },
-  {
-    name: "Body Temperature",
-    value: "98.6",
-    unit: "°F",
-    status: "normal",
-    icon: Thermometer,
-    trend: "Normal range"
-  },
-  {
-    name: "Blood Oxygen",
-    value: "98",
-    unit: "%",
-    status: "normal",
-    icon: Zap,
-    trend: "Excellent"
-  }
-]
+import { useVitals } from "@/hooks/useVitals"
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -51,6 +17,53 @@ const getStatusColor = (status: string) => {
 }
 
 export const VitalsDisplay = () => {
+  const { vitals, loading } = useVitals()
+
+  if (loading) {
+    return <div className="text-center py-4">Loading vitals...</div>
+  }
+
+  const latestVital = vitals[0]
+
+  if (!latestVital) {
+    return <div className="text-center py-4">No vital signs data available</div>
+  }
+
+  const vitalsData = [
+    {
+      name: "Heart Rate",
+      value: latestVital.heart_rate.toString(),
+      unit: "BPM",
+      status: latestVital.heart_rate > 100 ? "critical" : latestVital.heart_rate > 80 ? "warning" : "normal",
+      icon: Heart,
+      trend: "Live data"
+    },
+    {
+      name: "Blood Pressure",
+      value: `${latestVital.blood_pressure_systolic}/${latestVital.blood_pressure_diastolic}`,
+      unit: "mmHg",
+      status: latestVital.blood_pressure_systolic > 140 ? "critical" : latestVital.blood_pressure_systolic > 130 ? "warning" : "normal",
+      icon: Activity,
+      trend: "Live data"
+    },
+    {
+      name: "Body Temperature",
+      value: latestVital.temperature.toString(),
+      unit: "°C",
+      status: latestVital.temperature > 38 ? "critical" : latestVital.temperature > 37.5 ? "warning" : "normal",
+      icon: Thermometer,
+      trend: "Live data"
+    },
+    {
+      name: "Blood Oxygen",
+      value: latestVital.oxygen_saturation.toString(),
+      unit: "%",
+      status: latestVital.oxygen_saturation < 90 ? "critical" : latestVital.oxygen_saturation < 95 ? "warning" : "normal",
+      icon: Zap,
+      trend: "Live data"
+    }
+  ]
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       {vitalsData.map((vital) => {

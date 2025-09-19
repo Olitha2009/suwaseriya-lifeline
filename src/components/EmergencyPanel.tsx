@@ -2,29 +2,10 @@ import { AlertTriangle, MapPin, Clock, Users } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 import { MedicalButton } from "./ui/medical-button"
 import { Badge } from "./ui/badge"
-
-const emergencyAlerts = [
-  {
-    id: 1,
-    type: "High Priority",
-    patient: "John Doe",
-    location: "Downtown Medical Center",
-    condition: "Cardiac Arrest",
-    time: "2 minutes ago",
-    status: "active"
-  },
-  {
-    id: 2,
-    type: "Medium Priority",
-    patient: "Mary Smith",
-    location: "Westside Clinic",
-    condition: "Chest Pain",
-    time: "8 minutes ago",
-    status: "responding"
-  }
-]
+import { useEmergencyAlerts } from "@/hooks/useEmergencyAlerts"
 
 export const EmergencyPanel = () => {
+  const { alerts, loading, respondToAlert, resolveAlert } = useEmergencyAlerts();
   return (
     <Card className="border-emergency/20 bg-gradient-to-br from-background to-emergency/5">
       <CardHeader>
@@ -34,44 +15,63 @@ export const EmergencyPanel = () => {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {emergencyAlerts.map((alert) => (
-          <div key={alert.id} className="p-4 bg-card rounded-lg border border-emergency/20 shadow-soft">
-            <div className="flex items-start justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <Badge 
-                  variant="secondary" 
-                  className={alert.type === "High Priority" ? "bg-emergency text-emergency-foreground" : "bg-warning text-warning-foreground"}
-                >
-                  {alert.type}
-                </Badge>
-                <Badge variant="outline" className="text-xs">
-                  {alert.status.toUpperCase()}
-                </Badge>
+        {loading ? (
+          <div className="text-center py-4">Loading alerts...</div>
+        ) : (
+          alerts.map((alert) => (
+            <div key={alert.id} className="p-4 bg-card rounded-lg border border-emergency/20 shadow-soft">
+              <div className="flex items-start justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <Badge 
+                    variant="secondary" 
+                    className={alert.type === "Cardiac Emergency" ? "bg-emergency text-emergency-foreground" : "bg-warning text-warning-foreground"}
+                  >
+                    {alert.type}
+                  </Badge>
+                  <Badge variant="outline" className="text-xs">
+                    {alert.status.toUpperCase()}
+                  </Badge>
+                </div>
+                <span className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Clock className="h-3 w-3" />
+                  {new Date(alert.created_at).toLocaleTimeString()}
+                </span>
               </div>
-              <span className="text-xs text-muted-foreground flex items-center gap-1">
-                <Clock className="h-3 w-3" />
-                {alert.time}
-              </span>
+              
+              <h4 className="font-semibold text-foreground mb-1">Patient: {alert.patient_name}</h4>
+              <p className="text-sm text-muted-foreground mb-2">Condition: {alert.condition}</p>
+              
+              <div className="flex items-center gap-1 text-sm text-muted-foreground mb-3">
+                <MapPin className="h-3 w-3" />
+                {alert.location}
+              </div>
+              
+              <div className="flex gap-2">
+                {alert.status === 'active' && (
+                  <MedicalButton 
+                    variant="emergency" 
+                    size="sm"
+                    onClick={() => respondToAlert(alert.id)}
+                  >
+                    Respond
+                  </MedicalButton>
+                )}
+                {alert.status === 'responding' && (
+                  <MedicalButton 
+                    variant="success" 
+                    size="sm"
+                    onClick={() => resolveAlert(alert.id)}
+                  >
+                    Mark Resolved
+                  </MedicalButton>
+                )}
+                <MedicalButton variant="outline" size="sm">
+                  View Details
+                </MedicalButton>
+              </div>
             </div>
-            
-            <h4 className="font-semibold text-foreground mb-1">Patient: {alert.patient}</h4>
-            <p className="text-sm text-muted-foreground mb-2">Condition: {alert.condition}</p>
-            
-            <div className="flex items-center gap-1 text-sm text-muted-foreground mb-3">
-              <MapPin className="h-3 w-3" />
-              {alert.location}
-            </div>
-            
-            <div className="flex gap-2">
-              <MedicalButton variant="emergency" size="sm">
-                Respond
-              </MedicalButton>
-              <MedicalButton variant="outline" size="sm">
-                View Details
-              </MedicalButton>
-            </div>
-          </div>
-        ))}
+          ))
+        )}
         
         <div className="pt-4 border-t border-border">
           <div className="flex items-center justify-between text-sm text-muted-foreground mb-2">
